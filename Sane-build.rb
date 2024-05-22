@@ -12,7 +12,7 @@ FINAL_PO_DIR = Pathname.pwd + 'Sources' + 'SaneTranslations' + 'SaneBackends'
 LOG_PATH = Pathname.pwd + 'Sane-build-log.txt'
 
 # Release tag
-GIT_TAG = '1.2.1'.freeze
+GIT_BRANCH = 'release-1.3.0'.freeze
 
 # Build flags
 MAKE_JOBS = 4
@@ -78,8 +78,8 @@ def checkout
     puts 'Cloning sane-projets/backends'
     system_with_log("git clone https://gitlab.com/sane-project/backends.git \"#{GIT_DIR}\"")
 
-    puts "Checking out tag: #{GIT_TAG}"
-    system_with_log("cd \"#{GIT_DIR}\"; git checkout \"tags/#{GIT_TAG}\"")
+    puts "Checking out: #{GIT_BRANCH}"
+    system_with_log("cd \"#{GIT_DIR}\"; git checkout \"#{GIT_BRANCH}\"")
 
     puts "Directory: #{Dir.pwd}"
     puts 'Running autogen.sh'
