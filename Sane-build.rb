@@ -6,8 +6,9 @@ require 'pathname'
 
 # Paths
 GIT_DIR = Pathname.pwd + 'Sane-source'
-DEST_DIR = Pathname.pwd + 'Sane'
-FINAL_DIR = DEST_DIR + 'all'
+BUILD_DIR = Pathname.pwd + 'Sane-build'
+FINAL_LIB_DIR = Pathname.pwd + 'Sources' + 'SaneBackends'
+FINAL_PO_DIR = Pathname.pwd + 'Sources' + 'SaneTranslations' + 'SaneBackends'
 LOG_PATH = Pathname.pwd + 'Sane-build-log.txt'
 
 # Release tag
@@ -92,7 +93,7 @@ end
 def build_lib(name)
     options = BUILDS[name]
     start_date = Time.now
-    output_dir = DEST_DIR + name
+    output_dir = BUILD_DIR + name
 
     puts "Building target #{name}, minimum SDK version: #{options[:min]}"
 
@@ -107,7 +108,8 @@ def build_lib(name)
         "-arch #{options[:arch]}",
         "-m#{options[:min]}",
         "-isysroot #{sdk_path}",
-    ]
+        "-Wno-incompatible-function-pointer-types"
+   ]
     host_flags << "-target #{options[:target]}" if options.key?(:target)
     host_flags = host_flags.join(' ')
 
@@ -143,13 +145,13 @@ def merge_libs(platform)
 
     input_libs = ['libsane.a', 'sane/libsane-dll.a', 'sane/libsane-net.a']
     output_combined_lib = 'sane.a'
-    output_fat_lib = DEST_DIR + "#{platform}-all" + "libSane.a"
-    puts "Merging libs into #{output_combined_lib} for platform #{platform} then all architectures into #{output_fat_lib.relative_path_from(DEST_DIR)}"
+    output_fat_lib = BUILD_DIR + "#{platform}-all" + "libSane.a"
+    puts "Merging libs into #{output_combined_lib} for platform #{platform} then all architectures into #{output_fat_lib.relative_path_from(BUILD_DIR)}"
 
     # This will merge libsane.a, libsane-dll.a and libsane-net.a into a single sane.a
     combined = builds.keys.map do |name|
-        input = input_libs.map { |lib| DEST_DIR + name + "lib" + lib }.filter { |lib| File.exist?(lib) }
-        output = DEST_DIR + name + "lib" + output_combined_lib
+        input = input_libs.map { |lib| BUILD_DIR + name + "lib" + lib }.filter { |lib| File.exist?(lib) }
+        output = BUILD_DIR + name + "lib" + output_combined_lib
 
         command = "libtool -static #{input.join(' ')} -o #{output}"
         system_with_log(command)
@@ -166,10 +168,10 @@ def merge_libs(platform)
 end
 
 def copy_headers
-    input_dir = DEST_DIR + BUILDS.keys.first + 'include' + 'sane'
+    input_dir = BUILD_DIR + BUILDS.keys.first + 'include' + 'sane'
     input_files = [input_dir + 'sane.h', input_dir + 'saneopts.h']
 
-    output_dir = DEST_DIR + 'headers'
+    output_dir = BUILD_DIR + 'headers'
     create_empty_folder(output_dir)
 
     input_files.each do |input_file|
@@ -180,7 +182,7 @@ def copy_headers
 end
 
 def create_framework(libs, headers)
-    output_file = FINAL_DIR + 'Sane.xcframework'
+    output_file = FINAL_LIB_DIR + 'Sane.xcframework'
 
     puts 'Creating XCFramework'
     create_empty_folder(output_file)
@@ -239,7 +241,7 @@ end
 def copy_translations
     puts 'Copying string files'
 
-    output_dir = FINAL_DIR + 'translations'
+    output_dir = FINAL_PO_DIR
     create_empty_folder(output_dir)
 
     Dir.glob("#{GIT_DIR}/po/*.po").each do |file|

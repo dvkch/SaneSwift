@@ -1,16 +1,8 @@
 Icon
-Medias
-
-fastlane/report.xml
 
 Sane-build-log.txt
 Sane-source/
-Sane/ios-*
-Sane/sim-*
-Sane/catalyst-*
-Sane/macos-*
-Sane/macosx-*
-Sane/headers
+Sane-build/
 
 .DS_Store
 
