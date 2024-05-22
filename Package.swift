@@ -11,15 +11,15 @@ let package = Package(
         .tvOS(.v12)
     ],
     products: [
-        .library(name: "Sane", targets: ["SaneBackend", "SaneBackendTranslations", "SaneSwift", "SaneSwiftC"])
+        .library(name: "Sane", targets: ["SaneBackend", "SaneTranslations", "SaneSwift", "SaneSwiftC"])
     ],
     dependencies: [],
     targets: [
         .binaryTarget(name: "SaneBackend", path: "Sources/SaneBackend/all/Sane.xcframework"),
-        .target(name: "SaneBackendTranslations", dependencies: ["SaneBackend"], resources: [.copy("translations")]),
-        .target(name: "SaneSwift", dependencies: ["SaneSwiftC"], resources: [.process("Localizable")]),
+        .target(name: "SaneSwift", dependencies: ["SaneSwiftC", "SaneTranslations"]),
         .target(name: "SaneSwiftC"),
-        .testTarget(name: "SaneSwiftTests", dependencies: ["SaneBackend", "SaneBackendTranslations", "SaneSwift", "SaneSwiftC"]),
+        .target(name: "SaneTranslations", resources: [.process("SaneBackend"), .process("SaneSwift")]),
+        .testTarget(name: "SaneSwiftTests", dependencies: ["SaneBackend", "SaneTranslations", "SaneSwift", "SaneSwiftC"]),
     ],
     swiftLanguageVersions: [
         .v5

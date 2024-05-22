@@ -8,6 +8,7 @@
 
 import Foundation
 import Sane
+import SaneTranslations
 
 public enum SaneError: Error {
     case cancelled

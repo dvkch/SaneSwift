@@ -11,7 +11,7 @@ import Foundation
 // MARK: Public access
 public extension String {
     var saneTranslation: String {
-        return libSANETranslation.translation(for: self) ?? SaneSwiftTranslation.translation(for: self) ?? self
+        return SaneBackendTranslation.translation(for: self) ?? SaneSwiftTranslation.translation(for: self) ?? self
     }
 }
 
@@ -21,8 +21,7 @@ private struct SaneSwiftTranslation {
     
     fileprivate static func translation(for key: String) -> String? {
         if cachedBundle == nil {
-            guard let translationsBundleURL = Bundle(for: Sane.self).url(forResource: "SaneSwift-Translations", withExtension: "bundle") else { return nil }
-            cachedBundle = Bundle(url: translationsBundleURL)
+            cachedBundle = Bundle.module
         }
         
         return cachedBundle?.localizedString(forKey: key, value: nil, table: nil)
@@ -30,22 +29,20 @@ private struct SaneSwiftTranslation {
 }
 
 // MARK: libSANE translations
-private struct libSANETranslation {
+private struct SaneBackendTranslation {
     static private var cachedTranslations: [String: String]?
 
     fileprivate static func translation(for key: String) -> String? {
         if cachedTranslations == nil {
-            guard let translationsBundleURL = Bundle(for: Sane.self).url(forResource: "Sane-Translations", withExtension: "bundle") else { return nil }
-            guard let translationsBundle = Bundle(url: translationsBundleURL) else { return nil }
-            guard let translationURL = translationsBundle.url(forResource: "sane_strings", withExtension: "po") else { return nil }
-            cachedTranslations = libSANETranslation.parseFile(at: translationURL)
+            guard let translationURL = Bundle.module.url(forResource: "sane_strings", withExtension: "po") else { return nil }
+            cachedTranslations = SaneBackendTranslation.parseFile(at: translationURL)
         }
         
         return cachedTranslations?[key]
     }
 }
 
-extension libSANETranslation {
+extension SaneBackendTranslation {
     // MARK: Parsing
     private static func parseFile(at url: URL) -> [String: String]? {
         guard let content = try? String(contentsOf: url) else { return nil }
