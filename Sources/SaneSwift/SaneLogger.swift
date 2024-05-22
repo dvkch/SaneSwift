@@ -12,8 +12,8 @@ public struct SaneLogger {
     private init() {}
 
     // MARK: Level
-    public enum Level: CustomStringConvertible {
-        case debug, info, warning, error
+    public enum Level: Int, Comparable, CustomStringConvertible {
+        case debug = 0, info = 1, warning = 2, error = 3
         
         public var description: String {
             switch self {
@@ -22,6 +22,10 @@ public struct SaneLogger {
             case .warning:  return "Warning"
             case .error:    return "Error"
             }
+        }
+
+        public static func < (lhs: SaneLogger.Level, rhs: SaneLogger.Level) -> Bool {
+            return lhs.rawValue < rhs.rawValue
         }
     }
 

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Sane
 
 public struct DeviceAuthentication {
     private let username: String?

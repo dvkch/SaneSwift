@@ -10,6 +10,8 @@ import UIKit
 import ImageIO
 import CommonCrypto
 import MobileCoreServices
+import Sane
+import SaneSwiftC
 
 @propertyWrapper
 internal struct SaneLocked<Value> {

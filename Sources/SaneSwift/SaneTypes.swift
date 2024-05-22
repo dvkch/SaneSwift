@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import UIKit
+import Sane
+import SaneSwiftC
 
 // MARK: CustomStringConvertibale
 extension SANE_Frame : CustomStringConvertible {

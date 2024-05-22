@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import Sane
+import SaneSwiftC
 
 public protocol SaneDelegate: NSObjectProtocol {
     func saneDidUpdateConfig(_ sane: Sane, previousConfig: SaneConfig)

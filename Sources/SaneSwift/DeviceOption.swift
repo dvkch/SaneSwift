@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Sane
+import SaneSwiftC
 
 // MARK: Basic option
 public class DeviceOption {

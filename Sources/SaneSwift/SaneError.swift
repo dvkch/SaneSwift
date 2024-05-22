@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Sane
 
 public enum SaneError: Error {
     case cancelled

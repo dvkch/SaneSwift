@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @import Sane;
+@import libxml2; // forces linking against lixml2
 
 FOUNDATION_EXPORT void SaneSetLogLevel(int logLevel);
 FOUNDATION_EXPORT int SaneGetLogLevel(void);

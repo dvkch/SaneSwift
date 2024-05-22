@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Sane
 
 public class Device {
 

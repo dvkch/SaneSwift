@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreGraphics
+import Sane
 
 public struct ScanParameters: Equatable {
     public private(set) var currentlyAcquiredFrame: SANE_Frame
