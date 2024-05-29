@@ -12,7 +12,7 @@ FINAL_PO_DIR = Pathname.pwd + 'Sources' + 'SaneTranslations' + 'SaneBackends'
 LOG_PATH = Pathname.pwd + 'Sane-build-log.txt'
 
 # Release tag
-GIT_BRANCH = 'release-1.3.0'.freeze
+GIT_BRANCH = 'tags/1.3.1'.freeze
 
 # Build flags
 MAKE_JOBS = 4
